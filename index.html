@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lyrics</title>
+</head>
+<body>
+    <form id="form" onsubmit="return false;">
+        Artist:
+        <input type="text" id="artist" />
+        Title:
+        <input type="text" id="title" />
+        <input type="submit" onclick="api()" />
+    </form>
+    <h1 id='heading'></h1>
+    <p id='main'></p>
+
+    <script>
+        function api() {
+            let artist = document.getElementById("artist").value;
+            let title = document.getElementById("title").value;
+        
+            url = 'https://api.lyrics.ovh/v1/' + artist + '/' + title
+            document.title = "Lyrics: " + artist + ", " + title
+
+            let heading = document.getElementById('heading')
+            heading.textContent = artist + ", " + title            
+
+            get(url)            
+            .catch(() => document.getElementById('main').textContent = "Sorry! Couldn't find the lyrics!")
+        }
+        async function get(url) { 
+            const response = await fetch(url)
+            const json = await response.json()
+    
+            let lyrics = json.lyrics
+            lyrics = lyrics.replace(/\n/g, '<br>');
+
+            document.getElementById('main').innerHTML = lyrics            
+        }
+    </script>
+
+</body>
+</html>
